@@ -1,0 +1,22 @@
+{
+  "name": "recouch",
+  "version": "0.2.0",
+  "description": "Couchbase bindings for Javascript",
+  "main": "none",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/recouch/recouch.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Justin Paul Silva",
+  "license": "Apache-2.0",
+  "workspaces": {
+    "packages": [
+      "packages/core",
+      "packages/couchbase-lite-capacitor",
+      "packages/couchbase-lite-node"
+    ]
+  }
+}

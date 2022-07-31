@@ -1,0 +1,78 @@
+{
+  "name": "@recouch/couchbase-lite-node",
+  "version": "0.2.0",
+  "description": "Couchbase Lite bindings for Node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/recouch/recouch.git"
+  },
+  "files": [
+    "dist",
+    "src/c",
+    "binding.gyp",
+    "build-for-electron.sh",
+    "fetch-source.mjs",
+    "LICENSE",
+    "README.md",
+    "sources.mjs"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "build:c": "node-gyp build",
+    "build:ts": "rm -rf ./dist && tsc -p tsconfig.lib.json",
+    "build": "npm run build:c && npm run build:ts",
+    "build-for-electron": "./build-for-electron.sh",
+    "docs": "typedoc src/index.ts",
+    "fetch-source": "node ./fetch-source.mjs",
+    "install": "echo 'no install'",
+    "prepare": "npm run build:ts",
+    "postinstall": "node-gyp configure & npm run fetch-source & npm run build:c",
+    "rebuild": "node-gyp rebuild",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "couchbase",
+    "couchbase lite",
+    "cblite",
+    "database"
+  ],
+  "author": "Justin Paul Silva <justin@jpsilva.com>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "extract-zip": "^2.0.1",
+    "needle": "^3.1.0",
+    "node-gyp": "^9.0.0",
+    "type-fest": "^2.17.0"
+  },
+  "devDependencies": {
+    "@recouch/core": "file:../couchbase-lite-core",
+    "@types/bindings": "^1.5.1",
+    "@types/extract-zip": "^2.0.1",
+    "@types/jest": "^28.1.1",
+    "@types/nanoid": "^3.0.0",
+    "@types/needle": "^2.5.3",
+    "@types/typescript": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "jest": "^28.1.1",
+    "nanoid": "^3.1.30",
+    "prettier": "^2.6.2",
+    "ts-jest": "^28.0.4",
+    "ts-node": "^10.8.1",
+    "typedoc": "^0.22.17",
+    "typescript": "~4.7.3"
+  },
+  "peerDependencies": {
+    "@recouch/core": "^0.2.0"
+  }
+}

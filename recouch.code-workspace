@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": "."
+		},
+		{
+			"path": "packages/core"
+		},
+		{
+			"path": "packages/couchbase-lite-capacitor"
+		},
+		{
+			"path": "packages/couchbase-lite-node"
+		}
+	],
+	"settings": {}
+}

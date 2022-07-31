@@ -1,0 +1,46 @@
+{
+  "name": "@recouch/core",
+  "version": "0.2.0",
+  "description": "Unified API for Recouch packages",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf ./dist && tsc -p tsconfig.lib.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/recouch/recouch.git"
+  },
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "keywords": [
+    "Couchbase",
+    "Couchbase Lite",
+    "cblite"
+  ],
+  "author": "Justin Paul Silva",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/recouch/recouch/issues"
+  },
+  "homepage": "https://github.com/recouch/recouch#readme",
+  "devDependencies": {
+    "@types/node": "^18.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-n": "^15.2.3",
+    "eslint-plugin-promise": "^6.0.0",
+    "typescript": "~4.7.3"
+  },
+  "dependencies": {
+    "rambda": "^7.1.4",
+    "type-fest": "^2.17.0"
+  }
+}

@@ -1,0 +1,118 @@
+import { BlobMetadata, BlobReadStreamRef, BlobRef, BlobWriteStreamRef, BoundBlob, BoundBlobReadStream, BoundDatabase, BoundDocument, BoundDocumentPromise, BoundMutableDocument, BoundQuery, BoundReplicator, DatabaseRef, DocumentRef, MutableDocumentRef, QueryChangeListener, QueryRef, RemoveQueryChangeListener, ReplicatorConfiguration, ReplicatorRef } from '@recouch/core/src/types'
+import { addDatabaseChangeListener, addDocumentChangeListener, addDocumentReplicationListener, addQueryChangeListener, addReplicatorChangeListener, beginTransaction, blobContent, blobContentType, blobCreateJson, blobDigest, blobEquals, blobLength, blobProperties, closeBlobReader, closeBlobWriter, closeDatabase, createBlobWithStream, createBlobWriter, createDocument, createQuery, createReplicator, databaseGetBlob, databaseName, databasePath, databaseSaveBlob, deleteDatabase, deleteDocument, documentGetBlob, documentIsBlob, documentSetBlob, documentsPendingReplication, endTransaction, executeQuery, explainQuery, getDocument, getDocumentID, getDocumentProperties, getMutableDocument, getQueryParameters, isDocumentPendingReplication, openBlobContentStream, readBlobReader, replicatorConfiguration, replicatorStatus, saveDocument, setDocumentProperties, setQueryParameters, startReplicator, stopReplicator, writeBlobWriter } from './async'
+import { abortTransaction, commitTransaction } from './Database'
+
+export const bindBlob = (blobRef: BlobRef): BoundBlob => ({
+  content: blobContent.bind(null, blobRef),
+  contentType: blobContentType.bind(null, blobRef),
+  createJson: blobCreateJson.bind(null, blobRef),
+  properties: blobProperties.bind(null, blobRef),
+  digest: blobDigest.bind(null, blobRef),
+  equals: blobEquals.bind(null, blobRef),
+  length: blobLength.bind(null, blobRef),
+  openContentStream: () => openBlobContentStream(blobRef).then(bindBlobReadStream)
+})
+
+export const bindBlobReadStream = (streamRef: BlobReadStreamRef): BoundBlobReadStream => ({
+  close: closeBlobReader.bind(null, streamRef),
+  read: readBlobReader.bind(null, streamRef)
+})
+
+export const bindBlobWriteStream = (streamRef: BlobWriteStreamRef) => ({
+  close: closeBlobWriter.bind(null, streamRef),
+  createBlob: (contentType: string) => createBlobWithStream(contentType, streamRef),
+  write: writeBlobWriter.bind(null, streamRef)
+})
+
+export const bindDatabase = (dbRef: DatabaseRef): BoundDatabase => ({
+  // Database methods
+  abortTransaction: abortTransaction.bind(null, dbRef),
+  addChangeListener: addDatabaseChangeListener.bind(null, dbRef),
+  beginTransaction: beginTransaction.bind(null, dbRef),
+  close: closeDatabase.bind(null, dbRef),
+  commitTransaction: commitTransaction.bind(null, dbRef),
+  name: databaseName.bind(null, dbRef),
+  path: databasePath.bind(null, dbRef),
+  delete: deleteDatabase.bind(null, dbRef),
+  endTransaction: endTransaction.bind(null, dbRef),
+
+  // Blob methods
+  createBlobWriter: () => createBlobWriter(dbRef).then(bindBlobWriteStream),
+  getBlob: (properties: BlobMetadata) => databaseGetBlob(dbRef, properties).then(bindBlob),
+  saveBlob: databaseSaveBlob.bind(null, dbRef),
+
+  // Document methods
+  addDocumentChangeListener: addDocumentChangeListener.bind(null, dbRef),
+  createDocument: <T = unknown>(id?: string) => createDocument(id).then(docRef => bindMutableDocument<T>(dbRef, docRef as MutableDocumentRef<T>)!),
+  getDocument: <T = unknown>(id: string) => bindDocumentPromise(dbRef, getDocument<T>(dbRef, id)),
+  getMutableDocument: <T = unknown>(id: string) => getMutableDocument(dbRef, id).then(docRef => docRef && bindMutableDocument<T>(dbRef, docRef as MutableDocumentRef<T>)),
+
+  // Query methods
+  createQuery: ((...args: Parameters<BoundDatabase['createQuery']>) =>
+    createQuery(dbRef, ...args).then(bindQuery)) as BoundDatabase['createQuery'],
+
+  // Replicator methods
+  createReplicator: (config: Omit<ReplicatorConfiguration, 'database'>) => createReplicator({ ...config, database: dbRef }).then(bindReplicator)
+})
+
+export const bindDocument = <T = unknown>(dbRef: DatabaseRef, docRef: DocumentRef<T>):
+(typeof docRef extends null ? null : BoundDocument<T>) =>
+  ({
+    database: () => bindDatabase(dbRef),
+
+    delete: deleteDocument.bind(null, dbRef, docRef),
+    getID: getDocumentID.bind(null, docRef),
+    getProperties: () => getDocumentProperties(docRef) as Promise<T>,
+
+    // Blob methods
+    getBlob: (property: string) => documentGetBlob(docRef, property).then(bindBlob),
+    isBlob: documentIsBlob.bind(null, docRef)
+  })
+
+export const bindDocumentPromise = <T = unknown>(dbRef: DatabaseRef, docRef: Promise<DocumentRef<T> | null>): BoundDocumentPromise<T> => {
+  const boundDocumentPromise = docRef.then(res => res && bindDocument(dbRef, res))
+
+  return ({
+    ...boundDocumentPromise,
+    database: async () => bindDatabase(dbRef),
+    delete: () => boundDocumentPromise.then(doc => doc?.delete()),
+    getID: () => boundDocumentPromise.then(doc => doc?.getID()),
+    getProperties: () => boundDocumentPromise.then(doc => doc?.getProperties() as Promise<Awaited<T>>),
+    getBlob: (property: string) => boundDocumentPromise.then(doc => doc?.getBlob(property)),
+    isBlob: (property: string) => boundDocumentPromise.then(doc => doc?.isBlob(property))
+  })
+}
+
+export const bindMutableDocument = <T = unknown>(dbRef: DatabaseRef, docRef: MutableDocumentRef<T>): BoundMutableDocument<T> => docRef && {
+  database: () => bindDatabase(dbRef),
+
+  delete: deleteDocument.bind(null, dbRef, docRef),
+  getID: getDocumentID.bind(null, docRef),
+  getProperties: () => getDocumentProperties(docRef) as Promise<T>,
+  save: saveDocument.bind(null, dbRef, docRef),
+  setProperties: setDocumentProperties.bind(null, docRef),
+
+  // Blob methods
+  getBlob: (property: string) => documentGetBlob(docRef, property).then(bindBlob),
+  isBlob: documentIsBlob.bind(null, docRef),
+  setBlob: documentSetBlob.bind(null, docRef)
+}
+
+export const bindQuery = <T = unknown[], P = Record<string, string>>(queryRef: QueryRef<T, P>): BoundQuery<T, P> => ({
+  addChangeListener: addQueryChangeListener.bind(null, queryRef) as (handler: QueryChangeListener<T>) => Promise<RemoveQueryChangeListener>,
+  execute: () => executeQuery(queryRef) as Promise<T[]>,
+  explain: explainQuery.bind(null, queryRef),
+  getParameters: () => getQueryParameters(queryRef),
+  setParameters: setQueryParameters.bind(null, queryRef)
+})
+
+export const bindReplicator = (replicatorRef: ReplicatorRef): BoundReplicator => ({
+  addChangeListener: addReplicatorChangeListener.bind(null, replicatorRef),
+  addDocumentReplicationListener: addDocumentReplicationListener.bind(null, replicatorRef),
+  configuration: replicatorConfiguration.bind(null, replicatorRef),
+  documentsPendingReplication: documentsPendingReplication.bind(null, replicatorRef),
+  isDocumentPendingReplication: isDocumentPendingReplication.bind(null, replicatorRef),
+  start: startReplicator.bind(null, replicatorRef),
+  status: replicatorStatus.bind(null, replicatorRef),
+  stop: stopReplicator.bind(null, replicatorRef)
+})
