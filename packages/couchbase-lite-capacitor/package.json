@@ -1,6 +1,6 @@
 {
   "name": "@recouch/couchbase-lite-capacitor",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Couchbase Lite bindings for iOS and Android via Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
@@ -11,7 +11,7 @@
     "android/build.gradle",
     "dist/",
     "ios/Plugin/",
-    "RecouchCouchbaseLiteCapacitorPlugin.podspec"
+    "RecouchCouchbaseLiteCapacitor.podspec"
   ],
   "type": "module",
   "author": "Justin Paul Silva",

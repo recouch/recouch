@@ -2,7 +2,7 @@
   "name": "recouch",
   "version": "0.2.0",
   "description": "Couchbase bindings for Javascript",
-  "main": "none",
+  "private": "true",
   "repository": {
     "type": "git",
     "url": "https://github.com/recouch/recouch.git"

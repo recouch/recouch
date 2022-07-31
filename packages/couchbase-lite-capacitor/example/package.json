@@ -16,7 +16,7 @@
     "@capacitor/core": "latest",
     "@capacitor/camera": "latest",
     "@capacitor/splash-screen": "latest",
-    "@recouch/couchbase-lite-capacitor-plugin": "file:.."
+    "@recouch/couchbase-lite-capacitor": "file:.."
   },
   "devDependencies": {
     "@capacitor/cli": "latest",
