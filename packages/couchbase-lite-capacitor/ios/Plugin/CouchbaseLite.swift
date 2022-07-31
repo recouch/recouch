@@ -9,8 +9,8 @@ struct ListenerMeta {
 }
 
 @objc public class CouchbaseLite: NSObject {
-    private var _nextDatabaseKey = 0
-    private var _nextListenerTokenKey = 0
+    private var _nextDatabaseKey = 1
+    private var _nextListenerTokenKey = 1
     
     private var databases: [Int: Database] = [:]
     private var listeners: [Int: ListenerMeta] = [:]
@@ -124,19 +124,19 @@ struct ListenerMeta {
             return
         }
 
-//        let operation: () -> Void = {
+        let operation: () -> Void = {
             let document = database.document(withID: id)?.toMutable() ?? MutableDocument(id: id)
             
             document.setData(value)
 
             try!database.saveDocument(document)
-//        }
+        }
         
-//        guard var transaction = transactions[databaseKey] else {
-//            operation()
-//            return
-//        }
-//
-//        transaction.append(operation)
+        guard var transaction = transactions[databaseKey] else {
+            operation()
+            return
+        }
+
+        transaction.append(operation)
     }
 }
