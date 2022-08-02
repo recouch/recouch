@@ -1,6 +1,6 @@
 {
   "name": "@recouch/couchbase-lite-capacitor",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Couchbase Lite bindings for iOS and Android via Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
