@@ -33,7 +33,7 @@ public class CouchbaseLitePlugin: CAPPlugin {
         let listenerTokenKey = implementation.addDatabaseChangeListener(databaseKey: databaseKey, call: call)
 
         call.resolve([
-            "value": listenerTokenKey
+            "token": listenerTokenKey
         ])
     }
     
@@ -120,6 +120,7 @@ public class CouchbaseLitePlugin: CAPPlugin {
         call.resolve()
     }
 
+//    Document
     @objc func getDocument(_ call: CAPPluginCall) {
         guard let databaseKey = call.getInt("database") else {
             call.reject("No database specified")
@@ -138,11 +139,54 @@ public class CouchbaseLitePlugin: CAPPlugin {
     }
     
     @objc func addDocumentChangeListener(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let id = call.getString("id") else {
+            call.reject("No document ID specified")
+            return
+        }
+        
+        call.keepAlive = true
+        
+        let listenerTokenKey = implementation.addDocumentChangeListener(databaseKey: databaseKey, id: id, call: call)
+
+        call.resolve([
+            "token": listenerTokenKey
+        ])
     }
 
     @objc func deleteDocument(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        
+        implementation.deleteDocument(databaseKey: databaseKey, id: id)
+        
+        call.resolve()
+    }
+    
+    @objc func documentExists(_ call: CAPPluginCall) {
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        
+        call.resolve([
+            "value": implementation.documentExists(databaseKey: databaseKey, id: id)
+        ])
     }
 
     @objc func saveDocument(_ call: CAPPluginCall) {
@@ -167,15 +211,58 @@ public class CouchbaseLitePlugin: CAPPlugin {
     }
 
     @objc func createQuery(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let query = call.getString("query") else {
+            call.reject("No query string specified")
+            return
+        }
+        
+        let value = implementation.createQuery(databaseKey: databaseKey, query: query)
+        
+        call.resolve([
+            "value": value
+        ])
     }
 
     @objc func addQueryChangeListener(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let queryKey = call.getInt("query") else {
+            call.reject("No query specified")
+            return
+        }
+        
+        call.keepAlive = true
+        
+        let listenerTokenKey = implementation.addQueryChangeListener(queryKey: queryKey, call: call)
+
+        call.resolve([
+            "token": listenerTokenKey
+        ])
+    }
+    
+    @objc func removeQueryChangeListener(_ call: CAPPluginCall) {
+        guard let listenerTokenKey = call.getInt("token") else {
+            call.reject("No token specified")
+            return
+        }
+        
+        let callbackId = implementation.removeQueryChangeListener(listenerTokenKey: listenerTokenKey)
+        bridge?.releaseCall(withID: callbackId)
+
+        call.resolve()
     }
 
     @objc func executeQuery(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let queryKey = call.getInt("query") else {
+            call.reject("No query specified")
+            return
+        }
+        
+        call.resolve([
+            "value": implementation.executeQuery(queryKey: queryKey)
+        ])
     }
 
     @objc func explainQuery(_ call: CAPPluginCall) {
@@ -191,15 +278,68 @@ public class CouchbaseLitePlugin: CAPPlugin {
     }
 
     @objc func addDocumentReplicationListener(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let replicatorKey = call.getInt("replicator") else {
+            call.reject("No query specified")
+            return
+        }
+        
+        call.keepAlive = true
+        
+        let listenerTokenKey = implementation.addDocumentReplicationListener(replicatorKey: replicatorKey, call: call)
+        
+        if (listenerTokenKey == 0) {
+            call.reject("addDocumentReplicationListener failed")
+            bridge?.releaseCall(call)
+            return
+        }
+
+        call.resolve([
+            "token": listenerTokenKey
+        ])
     }
 
     @objc func addReplicatorChangeListener(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let replicatorKey = call.getInt("replicator") else {
+            call.reject("No query specified")
+            return
+        }
+        
+        call.keepAlive = true
+        
+        let listenerTokenKey = implementation.addReplicatorChangeListener(replicatorKey: replicatorKey, call: call)
+        
+        if (listenerTokenKey == 0) {
+            call.reject("addReplicatorChangeListener failed")
+            bridge?.releaseCall(call)
+            return
+        }
+
+        call.resolve([
+            "token": listenerTokenKey
+        ])
+    }
+    
+    @objc func removeReplicatorListener(_ call: CAPPluginCall) {
+        guard let listenerTokenKey = call.getInt("token") else {
+            call.reject("No token specified")
+            return
+        }
+        
+        let callbackId = implementation.removeReplicatorListener(listenerTokenKey: listenerTokenKey)
+        bridge?.releaseCall(withID: callbackId)
+
+        call.resolve()
     }
 
     @objc func createReplicator(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let config = call.getObject("config") else {
+            call.reject("No config specified")
+            return
+        }
+        
+        call.resolve([
+            "value": implementation.createReplicator(config: config)
+        ])
     }
 
     @objc func documentsPendingReplication(_ call: CAPPluginCall) {
@@ -223,11 +363,25 @@ public class CouchbaseLitePlugin: CAPPlugin {
     }
 
     @objc func startReplicator(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let replicatorKey = call.getInt("replicator") else {
+            call.reject("No replicator specified")
+            return
+        }
+        
+        implementation.startReplicator(replicatorKey: replicatorKey)
+        
+        call.resolve()
     }
 
     @objc func stopReplicator(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let replicatorKey = call.getInt("replicator") else {
+            call.reject("No replicator specified")
+            return
+        }
+        
+        implementation.stopReplicator(replicatorKey: replicatorKey)
+        
+        call.resolve()
     }
 
     @objc func blobContent(_ call: CAPPluginCall) {

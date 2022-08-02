@@ -1,7 +1,6 @@
-import { curry } from 'rambda'
-import { DatabaseRef } from './ref';
-import { adapterFunction } from './functions';
-import { DocumentChangeListener, RemoveDocumentChangeListener } from './adapterFunctions';
+import { DatabaseRef } from './ref'
+import { adapterFunction } from './functions'
+import { DocumentChangeListener, RemoveDocumentChangeListener } from './adapterFunctions'
 
 export type AddDocumentChangeListener =
   & ((database: DatabaseRef, id: string, handler: DocumentChangeListener) => Promise<RemoveDocumentChangeListener>)
@@ -31,9 +30,11 @@ export type SaveDocument =
     & ((id: string) => (value: T) => Promise<void>)
   ))
 
-export const addDocumentChangeListener: AddDocumentChangeListener = curry(adapterFunction('addDocumentChangeListener'))
-export const deleteDocument: DeleteDocument = curry(adapterFunction('deleteDocument'))
-export const getDocument: GetDocument = curry(adapterFunction('getDocument'))
-export const documentExists: DocumentExists = curry(adapterFunction('documentExists'))
-export const getRevisionID: GetRevisionID = curry(adapterFunction('getRevisionID'))
-export const saveDocument: SaveDocument = curry(adapterFunction('saveDocument'))
+export const addDocumentChangeListener: AddDocumentChangeListener = adapterFunction('addDocumentChangeListener')
+export const deleteDocument: DeleteDocument = adapterFunction('deleteDocument')
+export const getDocument = adapterFunction('getDocument') as GetDocument
+export const documentExists: DocumentExists = adapterFunction('documentExists')
+export const getRevisionID: GetRevisionID = adapterFunction('getRevisionID')
+export const saveDocument: SaveDocument = adapterFunction('saveDocument')
+
+export const saveDocument2 = adapterFunction('saveDocument')

@@ -1,4 +1,3 @@
-import { curry } from 'rambda'
 import { DatabaseRef, QueryRef } from './ref'
 import { QueryChangeListener, RemoveQueryChangeListener } from './adapterFunctions'
 import { adapterFunction } from './functions'
@@ -16,9 +15,9 @@ export type SetQueryParameters =
   & (<T = unknown, P = Record<string, string>>(query: QueryRef<T, P>, parameters: Partial<P>) => Promise<void>)
   & (<T = unknown, P = Record<string, string>>(query: QueryRef<T, P>) => (parameters: Partial<P>) => Promise<void>)
 
-export const createQuery: CreateQuery = curry(adapterFunction('createQuery'))
-export const addQueryChangeListener: AddQueryChangeListener = curry(adapterFunction('addQueryChangeListener'))
+export const createQuery: CreateQuery = adapterFunction('createQuery')
+export const addQueryChangeListener: AddQueryChangeListener = adapterFunction('addQueryChangeListener')
 export const executeQuery = adapterFunction('executeQuery') as ExecuteQuery
 export const explainQuery: ExplainQuery = adapterFunction('explainQuery')
 export const getQueryParameters: GetQueryParameters = adapterFunction('getQueryParameters')
-export const setQueryParameters: SetQueryParameters = curry(adapterFunction('setQueryParameters'))
+export const setQueryParameters: SetQueryParameters = adapterFunction('setQueryParameters')

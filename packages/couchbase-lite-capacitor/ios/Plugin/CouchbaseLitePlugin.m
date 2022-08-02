@@ -10,12 +10,13 @@ CAP_PLUGIN(CouchbaseLitePlugin, "CouchbaseLite",
 //           (Database)
            CAP_PLUGIN_METHOD(closeDatabase, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(addDatabaseChangeListener, CAPPluginReturnCallback);
-//           CAP_PLUGIN_METHOD(beginTransaction, CAPPluginReturnPromise); // Unsupported?
+           CAP_PLUGIN_METHOD(beginTransaction, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(deleteDatabase, CAPPluginReturnNone);
-//           CAP_PLUGIN_METHOD(endTransaction, CAPPluginReturnPromise); // Unsupported?
+           CAP_PLUGIN_METHOD(endTransaction, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(databaseName, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(databasePath, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(addDocumentChangeListener, CAPPluginReturnCallback);
+           CAP_PLUGIN_METHOD(documentExists, CAPPluginReturnPromise);
            
 //           (Database) => Document
            CAP_PLUGIN_METHOD(getDocument, CAPPluginReturnPromise);
@@ -29,11 +30,6 @@ CAP_PLUGIN(CouchbaseLitePlugin, "CouchbaseLite",
            
 //           (Document)
            CAP_PLUGIN_METHOD(deleteDocument, CAPPluginReturnNone);
-           CAP_PLUGIN_METHOD(getDocumentJSON, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(getDocumentID, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(getDocumentProperties, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(setDocumentJSON, CAPPluginReturnNone);
-           CAP_PLUGIN_METHOD(setDocumentProperties, CAPPluginReturnNone);
 
 //           (Database) => Query
            CAP_PLUGIN_METHOD(createQuery, CAPPluginReturnPromise);
@@ -49,6 +45,7 @@ CAP_PLUGIN(CouchbaseLitePlugin, "CouchbaseLite",
 //           (Replicator)
            CAP_PLUGIN_METHOD(addDocumentReplicationListener, CAPPluginReturnCallback);
            CAP_PLUGIN_METHOD(addReplicatorChangeListener, CAPPluginReturnCallback);
+           CAP_PLUGIN_METHOD(removeReplicatorListener, CAPPluginReturnNone);
            CAP_PLUGIN_METHOD(documentsPendingReplication, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(isDocumentPendingReplication, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(replicatorConfiguration, CAPPluginReturnPromise);

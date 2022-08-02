@@ -18,5 +18,8 @@
       "packages/couchbase-lite-capacitor",
       "packages/couchbase-lite-node"
     ]
+  },
+  "devDependencies": {
+    "lerna": "^5.3.0"
   }
 }

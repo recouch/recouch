@@ -13,82 +13,53 @@ npx cap sync
 
 <docgen-index>
 
-- [@recouch/couchbase-lite-capacitor](#recouchcouchbase-lite-capacitor)
-  - [Install](#install)
-  - [API](#api)
-    - [openDatabase(...)](#opendatabase)
-    - [addDatabaseChangeListener(...)](#adddatabasechangelistener)
-    - [beginTransaction(...)](#begintransaction)
-    - [closeDatabase(...)](#closedatabase)
-    - [databaseName(...)](#databasename)
-    - [databasePath(...)](#databasepath)
-    - [deleteDatabase(...)](#deletedatabase)
-    - [deleteDatabase(...)](#deletedatabase-1)
-    - [endTransaction(...)](#endtransaction)
-    - [removeDatabaseChangeListener(...)](#removedatabasechangelistener)
-    - [addDocumentChangeListener(...)](#adddocumentchangelistener)
-    - [deleteDocument(...)](#deletedocument)
-    - [getDocument(...)](#getdocument)
-    - [removeDocumentChangeListener(...)](#removedocumentchangelistener)
-    - [saveDocument(...)](#savedocument)
-    - [createQuery(...)](#createquery)
-    - [addQueryChangeListener(...)](#addquerychangelistener)
-    - [executeQuery(...)](#executequery)
-    - [explainQuery(...)](#explainquery)
-    - [getQueryParameters(...)](#getqueryparameters)
-    - [removeQueryChangeListener(...)](#removequerychangelistener)
-    - [setQueryParameters(...)](#setqueryparameters)
-    - [addDocumentReplicationListener(...)](#adddocumentreplicationlistener)
-    - [addReplicatorChangeListener(...)](#addreplicatorchangelistener)
-    - [createReplicator(...)](#createreplicator)
-    - [documentsPendingReplication(...)](#documentspendingreplication)
-    - [isDocumentPendingReplication(...)](#isdocumentpendingreplication)
-    - [removeDocumentReplicationListener(...)](#removedocumentreplicationlistener)
-    - [removeReplicatorChangeListener(...)](#removereplicatorchangelistener)
-    - [replicatorConfiguration(...)](#replicatorconfiguration)
-    - [replicatorStatus(...)](#replicatorstatus)
-    - [setHostReachable(...)](#sethostreachable)
-    - [startReplicator(...)](#startreplicator)
-    - [stopReplicator(...)](#stopreplicator)
-    - [blobContent(...)](#blobcontent)
-    - [blobContentType(...)](#blobcontenttype)
-    - [blobCreateJson(...)](#blobcreatejson)
-    - [blobProperties(...)](#blobproperties)
-    - [blobDigest(...)](#blobdigest)
-    - [blobEquals(...)](#blobequals)
-    - [blobLength(...)](#bloblength)
-    - [databaseGetBlob(...)](#databasegetblob)
-    - [databaseSaveBlob(...)](#databasesaveblob)
-    - [documentGetBlob(...)](#documentgetblob)
-    - [documentIsBlob(...)](#documentisblob)
-    - [documentSetBlob(...)](#documentsetblob)
-    - [Interfaces](#interfaces)
-      - [DatabaseRefOptions](#databaserefoptions)
-      - [QueryRefOptions](#queryrefoptions)
-      - [ReplicatorRefOptions](#replicatorrefoptions)
-      - [ReplicatorStatus](#replicatorstatus-1)
-      - [ReplicatorConfiguration](#replicatorconfiguration-1)
-      - [BlobOptions](#bloboptions)
-      - [BlobMetadata](#blobmetadata)
-    - [Type Aliases](#type-aliases)
-      - [Result](#result)
-      - [DatabaseRef](#databaseref)
-      - [Opaque](#opaque)
-      - [Tagged](#tagged)
-      - [DatabaseChangeListener](#databasechangelistener)
-      - [ListenerToken](#listenertoken)
-      - [DocumentChangeListener](#documentchangelistener)
-      - [QueryRef](#queryref)
-      - [Parameters](#parameters)
-      - [Record](#record)
-      - [QueryChangeListener](#querychangelistener)
-      - [Partial](#partial)
-      - [ReplicatorRef](#replicatorref)
-      - [DocumentReplicationListener](#documentreplicationlistener)
-      - [ReplicatedDocInfo](#replicateddocinfo)
-      - [ReplicatorChangeListener](#replicatorchangelistener)
-      - [ReplicatorType](#replicatortype)
-      - [BlobConfig](#blobconfig)
+* [`openDatabase(...)`](#opendatabase)
+* [`addDatabaseChangeListener(...)`](#adddatabasechangelistener)
+* [`beginTransaction(...)`](#begintransaction)
+* [`closeDatabase(...)`](#closedatabase)
+* [`databaseName(...)`](#databasename)
+* [`databasePath(...)`](#databasepath)
+* [`deleteDatabase(...)`](#deletedatabase)
+* [`deleteDatabase(...)`](#deletedatabase)
+* [`endTransaction(...)`](#endtransaction)
+* [`removeDatabaseChangeListener(...)`](#removedatabasechangelistener)
+* [`addDocumentChangeListener(...)`](#adddocumentchangelistener)
+* [`deleteDocument(...)`](#deletedocument)
+* [`documentExists(...)`](#documentexists)
+* [`getDocument(...)`](#getdocument)
+* [`saveDocument(...)`](#savedocument)
+* [`createQuery(...)`](#createquery)
+* [`addQueryChangeListener(...)`](#addquerychangelistener)
+* [`executeQuery(...)`](#executequery)
+* [`explainQuery(...)`](#explainquery)
+* [`getQueryParameters(...)`](#getqueryparameters)
+* [`removeQueryChangeListener(...)`](#removequerychangelistener)
+* [`setQueryParameters(...)`](#setqueryparameters)
+* [`addDocumentReplicationListener(...)`](#adddocumentreplicationlistener)
+* [`addReplicatorChangeListener(...)`](#addreplicatorchangelistener)
+* [`createReplicator(...)`](#createreplicator)
+* [`documentsPendingReplication(...)`](#documentspendingreplication)
+* [`isDocumentPendingReplication(...)`](#isdocumentpendingreplication)
+* [`removeReplicatorListener(...)`](#removereplicatorlistener)
+* [`replicatorConfiguration(...)`](#replicatorconfiguration)
+* [`replicatorStatus(...)`](#replicatorstatus)
+* [`setHostReachable(...)`](#sethostreachable)
+* [`startReplicator(...)`](#startreplicator)
+* [`stopReplicator(...)`](#stopreplicator)
+* [`blobContent(...)`](#blobcontent)
+* [`blobContentType(...)`](#blobcontenttype)
+* [`blobCreateJson(...)`](#blobcreatejson)
+* [`blobProperties(...)`](#blobproperties)
+* [`blobDigest(...)`](#blobdigest)
+* [`blobEquals(...)`](#blobequals)
+* [`blobLength(...)`](#bloblength)
+* [`databaseGetBlob(...)`](#databasegetblob)
+* [`databaseSaveBlob(...)`](#databasesaveblob)
+* [`documentGetBlob(...)`](#documentgetblob)
+* [`documentIsBlob(...)`](#documentisblob)
+* [`documentSetBlob(...)`](#documentsetblob)
+* [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 
 </docgen-index>
 
@@ -277,6 +248,21 @@ deleteDocument(options: DatabaseRefOptions & { id: string; }) => Result<void>
 --------------------
 
 
+### documentExists(...)
+
+```typescript
+documentExists(options: DatabaseRefOptions & { id: string; }) => Result<boolean>
+```
+
+| Param         | Type                                                                                |
+| ------------- | ----------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#databaserefoptions">DatabaseRefOptions</a> & { id: string; }</code> |
+
+**Returns:** <code><a href="#result">Result</a>&lt;boolean&gt;</code>
+
+--------------------
+
+
 ### getDocument(...)
 
 ```typescript
@@ -288,21 +274,6 @@ getDocument<T = object>(options: DatabaseRefOptions & { id: string; }) => Result
 | **`options`** | <code><a href="#databaserefoptions">DatabaseRefOptions</a> & { id: string; }</code> |
 
 **Returns:** <code><a href="#result">Result</a>&lt;T&gt;</code>
-
---------------------
-
-
-### removeDocumentChangeListener(...)
-
-```typescript
-removeDocumentChangeListener(options: { token: ListenerToken; }) => Result<void>
-```
-
-| Param         | Type                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ token: <a href="#tagged">Tagged</a>&lt;'<a href="#listenertoken">ListenerToken</a>'&gt;; }</code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;void&gt;</code>
 
 --------------------
 
@@ -505,25 +476,10 @@ isDocumentPendingReplication(options: ReplicatorRefOptions & { documentID: strin
 --------------------
 
 
-### removeDocumentReplicationListener(...)
+### removeReplicatorListener(...)
 
 ```typescript
-removeDocumentReplicationListener(options: { token: ListenerToken; }) => Result<void>
-```
-
-| Param         | Type                                                                                                      |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
-| **`options`** | <code>{ token: <a href="#tagged">Tagged</a>&lt;'<a href="#listenertoken">ListenerToken</a>'&gt;; }</code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;void&gt;</code>
-
---------------------
-
-
-### removeReplicatorChangeListener(...)
-
-```typescript
-removeReplicatorChangeListener(options: { token: ListenerToken; }) => Result<void>
+removeReplicatorListener(options: { token: ListenerToken; }) => Result<void>
 ```
 
 | Param         | Type                                                                                                      |
@@ -922,9 +878,7 @@ Obtain the parameters of a function type in a tuple
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 
 #### QueryChangeListener
@@ -936,9 +890,7 @@ Construct a type with a set of properties K of type T
 
 Make all properties in T optional
 
-<code>{
- [P in keyof T]?: T[P];
- }</code>
+<code>{ [P in keyof T]?: T[P]; }</code>
 
 
 #### ReplicatorRef

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import type { BlobConfig, BlobMetadata, DatabaseRef, QueryRef, ReplicatedDocInfo, ReplicatorConfiguration, ReplicatorRef, ReplicatorStatus } from '@recouch/core'
-import type { Opaque } from 'type-fest'
+import type { MergeExclusive, Opaque } from 'type-fest'
 
-export type DatabaseChangeListener = (res: { value: { docIDs: string[] } }) => void
-export type DocumentChangeListener = (res: { value: { docID: string } }) => void
-export type DocumentReplicationListener = (res: { value: { direction: 'push' | 'pull', documents: ReplicatedDocInfo[] } } ) => void
-export type QueryChangeListener<T> = (res: { value: { results: T[] } }) => void
-export type ReplicatorChangeListener = (res: { value: ReplicatorStatus }) => void
 export type ListenerToken = Opaque<unknown, 'ListenerToken'>
+type Listener<T extends object> = (res: MergeExclusive<T, { token: ListenerToken }>) => void
+export type DatabaseChangeListener = Listener<{ docIDs: string[] }>
+export type DocumentChangeListener = Listener<{ docID: string }>
+export type DocumentReplicationListener = Listener<{ direction: 'push' | 'pull', documents: ReplicatedDocInfo[] } >
+export type QueryChangeListener<T> = Listener<{ results: T[] }>
+export type ReplicatorChangeListener = Listener<{ status: ReplicatorStatus }>
 
 interface DatabaseRefOptions {
   database: DatabaseRef
@@ -42,8 +43,8 @@ export interface CouchbaseLitePlugin {
 
   addDocumentChangeListener(options: DatabaseRefOptions & { id: string }, handler: DocumentChangeListener): Result<ListenerToken>
   deleteDocument(options: DatabaseRefOptions & { id: string }): Result<void>
+  documentExists(options: DatabaseRefOptions & { id: string }): Result<boolean>
   getDocument<T = object>(options: DatabaseRefOptions & { id: string }): Result<T | undefined>
-  removeDocumentChangeListener(options: { token: ListenerToken }): Result<void>
   saveDocument<T = object>(options: DatabaseRefOptions & { id: string, value: T }): Result<void>
 
   createQuery<T = unknown, P = Record<string, string>>(options: DatabaseRefOptions & { query: string }): Result<QueryRef<T, P>>
@@ -59,8 +60,7 @@ export interface CouchbaseLitePlugin {
   createReplicator(options: { config: ReplicatorConfiguration }): Result<ReplicatorRef>
   documentsPendingReplication(options: ReplicatorRefOptions): Result<string[]>
   isDocumentPendingReplication(options: ReplicatorRefOptions & { documentID: string }): Result<boolean>
-  removeDocumentReplicationListener(options: { token: ListenerToken }): Result<void>
-  removeReplicatorChangeListener(options: { token: ListenerToken }): Result<void>
+  removeReplicatorListener(options: { token: ListenerToken }): Result<void>
   replicatorConfiguration(options: ReplicatorRefOptions): Result<ReplicatorConfiguration>
   replicatorStatus(options: ReplicatorRefOptions): Result<ReplicatorStatus>
   setHostReachable(options: ReplicatorRefOptions & { reachable: boolean }): Result<void>

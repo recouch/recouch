@@ -19,9 +19,13 @@ export type RemoveDatabaseChangeListener = () => void
 
 export const openDatabase: AdapterOpenDatabase = (config: DatabaseConfig) => CouchbaseLite.openDatabase(config).then(getValue)
 export const addDatabaseChangeListener: AdapterAddDatabaseChangeListener = (database, handler) =>
-  CouchbaseLite.addDatabaseChangeListener({ database }, ({ value: { docIDs } }) => handler(docIDs))
-    .then(getValue)
-    .then(token => () => CouchbaseLite.removeDatabaseChangeListener({ token }))
+  new Promise(resolve =>
+    CouchbaseLite.addDatabaseChangeListener({ database }, ({ docIDs, token }) => {
+      if (token) return resolve(() => CouchbaseLite.removeDatabaseChangeListener({ token }))
+
+      handler(docIDs)
+    })
+  )
 export const beginTransaction: AdapterBeginTransaction = (database) => CouchbaseLite.beginTransaction({ database })
 export const closeDatabase: AdapterCloseDatabase = (database) => CouchbaseLite.closeDatabase({ database })
 export const databaseName: AdapterDatabaseName = (database) => CouchbaseLite.databaseName({ database }).then(getValue)

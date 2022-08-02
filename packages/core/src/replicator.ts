@@ -1,4 +1,3 @@
-import { curry } from 'rambda'
 import { DocumentReplicationListener, RemoveDocumentReplicationListener, RemoveReplicatorChangeListener, ReplicatorChangeListener, ReplicatorConfiguration, ReplicatorStatus } from './adapterFunctions'
 import { adapterFunction } from './functions'
 import { ReplicatorRef } from './ref'
@@ -22,13 +21,13 @@ export type SetHostReachable =
 export type StartReplicator = (replicator: ReplicatorRef, resetCheckpoint?: boolean) => Promise<void>
 export type StopReplicator = (replicator: ReplicatorRef) => Promise<void>
 
-export const addDocumentReplicationListener: AddDocumentReplicationListener = curry(adapterFunction('addDocumentReplicationListener'))
-export const addReplicatorChangeListener: AddReplicatorChangeListener = curry(adapterFunction('addReplicatorChangeListener'))
+export const addDocumentReplicationListener: AddDocumentReplicationListener = adapterFunction('addDocumentReplicationListener')
+export const addReplicatorChangeListener: AddReplicatorChangeListener = adapterFunction('addReplicatorChangeListener')
 export const createReplicator = adapterFunction('createReplicator')
 export const documentsPendingReplication = adapterFunction('documentsPendingReplication')
-export const isDocumentPendingReplication: IsDocumentPendingReplication = curry(adapterFunction('isDocumentPendingReplication'))
+export const isDocumentPendingReplication: IsDocumentPendingReplication = adapterFunction('isDocumentPendingReplication')
 export const replicatorConfiguration = adapterFunction('replicatorConfiguration')
 export const replicatorStatus = adapterFunction('replicatorStatus')
-export const setHostReachable: SetHostReachable = curry(adapterFunction('setHostReachable'))
+export const setHostReachable: SetHostReachable = adapterFunction('setHostReachable')
 export const startReplicator = adapterFunction('startReplicator')
 export const stopReplicator = adapterFunction('stopReplicator')

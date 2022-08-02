@@ -51,8 +51,6 @@ describe('Replicator', () => {
       const replicatorChangeListener = jest.fn()
       const server = createServer((_req, res) => res.end()).listen(port)
 
-      server.on('*', evt => console.log('evt', evt))
-
       const stop = addReplicatorChangeListener(replicator, replicatorChangeListener)
       startReplicator(replicator)
       await timeout(50)

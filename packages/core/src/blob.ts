@@ -1,14 +1,13 @@
-import { curry } from 'rambda'
 import { DatabaseRef } from './ref'
 import { adapterFunction } from './functions'
 import { BlobConfig, BlobMetadata } from './adapterFunctions'
 
 export type BlobProperties = (blob: BlobConfig) => Promise<BlobMetadata>
 
-export type DatabaseGetBlob = 
+export type DatabaseGetBlob =
   & ((database: DatabaseRef, properties: BlobMetadata) => Promise<Buffer | undefined>)
   & ((database: DatabaseRef) => (properties: BlobMetadata) => Promise<Buffer | undefined>)
-export type DatabaseSaveBlob = 
+export type DatabaseSaveBlob =
   & ((database: DatabaseRef, blob: BlobConfig) => Promise<void>)
   & ((database: DatabaseRef) => (blob: BlobConfig) => Promise<void>)
 
@@ -37,9 +36,9 @@ export type DocumentSetBlob =
   & ((database: DatabaseRef, id: string, property: string) => (blob: BlobConfig) => Promise<void>)
 
 export const blobProperties: BlobProperties = adapterFunction('blobProperties')
-export const databaseGetBlob: DatabaseGetBlob = curry(adapterFunction('databaseGetBlob'))
-export const databaseSaveBlob: DatabaseSaveBlob = curry(adapterFunction('databaseSaveBlob'))
-export const documentGetBlob: DocumentGetBlob = curry(adapterFunction('documentGetBlob'))
-export const documentGetBlobProperties: DocumentGetBlobProperties = curry(adapterFunction('documentGetBlobProperties'))
-export const documentIsBlob: DocumentIsBlob = curry(adapterFunction('documentIsBlob'))
-export const documentSetBlob: DocumentSetBlob = curry(adapterFunction('documentSetBlob'))
+export const databaseGetBlob: DatabaseGetBlob = adapterFunction('databaseGetBlob')
+export const databaseSaveBlob: DatabaseSaveBlob = adapterFunction('databaseSaveBlob')
+export const documentGetBlob: DocumentGetBlob = adapterFunction('documentGetBlob')
+export const documentGetBlobProperties: DocumentGetBlobProperties = adapterFunction('documentGetBlobProperties')
+export const documentIsBlob: DocumentIsBlob = adapterFunction('documentIsBlob')
+export const documentSetBlob: DocumentSetBlob = adapterFunction('documentSetBlob')

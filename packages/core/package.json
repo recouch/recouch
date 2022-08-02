@@ -40,7 +40,6 @@
     "typescript": "~4.7.3"
   },
   "dependencies": {
-    "rambda": "^7.1.4",
     "type-fest": "^2.17.0"
   }
 }

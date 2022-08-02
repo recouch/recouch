@@ -1,4 +1,3 @@
-import { curry } from 'rambda'
 import {
   DatabaseChangeListener,
   DatabaseConfig,
@@ -26,12 +25,12 @@ export type EndTransaction =
 export type OpenDatabase = (config: DatabaseConfig) => Promise<DatabaseRef>
 
 export const abortTransaction: AbortTransaction = database => adapterFunction('endTransaction')(database, false)
-export const addDatabaseChangeListener: AddDatabaseChangeListener = curry(adapterFunction('addDatabaseChangeListener'))
+export const addDatabaseChangeListener: AddDatabaseChangeListener = adapterFunction('addDatabaseChangeListener')
 export const beginTransaction: BeginTransaction = adapterFunction('beginTransaction')
 export const closeDatabase: CloseDatabase = adapterFunction('closeDatabase')
 export const commitTransaction: CommitTransaction = database => adapterFunction('endTransaction')(database, true)
 export const databaseName: DatabaseName = adapterFunction('databaseName')
 export const databasePath: DatabasePath = adapterFunction('databasePath')
 export const deleteDatabase = adapterFunction('deleteDatabase') as DeleteDatabase
-export const endTransaction: EndTransaction = curry(adapterFunction('endTransaction'))
+export const endTransaction: EndTransaction = adapterFunction('endTransaction')
 export const openDatabase: OpenDatabase = adapterFunction('openDatabase')

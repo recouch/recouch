@@ -7,14 +7,22 @@ import { getValue } from './utils'
 export type RemoveDocumentReplicationListener = () => void
 export type RemoveReplicatorChangeListener = () => void
 
-export const addDocumentReplicationListener: AdapterAddDocumentReplicationListener = (replicator, handler: DocumentReplicationListener) => 
-  CouchbaseLite.addDocumentReplicationListener({ replicator }, ({ value: { direction, documents } }) => handler(direction, documents))
-    .then(getValue)
-    .then(token => () => CouchbaseLite.removeDocumentReplicationListener({ token }))
-export const addReplicatorChangeListener: AdapterAddReplicatorChangeListener = (replicator, handler: ReplicatorChangeListener) => 
-  CouchbaseLite.addReplicatorChangeListener({ replicator }, ({ value }) => handler(value))
-    .then(getValue)
-    .then(token => () => CouchbaseLite.removeReplicatorChangeListener({ token }))
+export const addDocumentReplicationListener: AdapterAddDocumentReplicationListener = (replicator, handler: DocumentReplicationListener) =>
+  new Promise(resolve =>
+    CouchbaseLite.addDocumentReplicationListener({ replicator }, ({ direction, documents, token }) => {
+      if (token) return resolve(() => CouchbaseLite.removeReplicatorListener({ token }))
+
+      handler(direction, documents)
+    })
+  )
+export const addReplicatorChangeListener: AdapterAddReplicatorChangeListener = (replicator, handler: ReplicatorChangeListener) =>
+  new Promise(resolve =>
+    CouchbaseLite.addReplicatorChangeListener({ replicator }, ({ status, token }) => {
+      if (token) return resolve(() => CouchbaseLite.removeReplicatorListener({ token }))
+
+      handler(status)
+    })
+  )
 export const createReplicator: AdapterCreateReplicator = (config: ReplicatorConfiguration) =>
   CouchbaseLite.createReplicator({ config }).then(getValue)
 export const documentsPendingReplication: AdapterDocumentsPendingReplication = (replicator) =>
