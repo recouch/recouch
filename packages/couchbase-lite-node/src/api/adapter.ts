@@ -85,12 +85,12 @@ export const adapter: CouchbaseLiteAdapter = {
 
     return docRef ? cblite.documentIsBlob(docRef, property) : false
   },
-  documentSetBlob: async (db: DatabaseRef, id: string, property: string, blob: BlobConfig) => {
+  documentSaveBlob: async (db: DatabaseRef, id: string, property: string, blob: BlobConfig) => {
     const docRef = cblite.getMutableDocument(db, id)
 
     if (!docRef) throw new Error('Document does not exist')
 
-    const blobRef = cblite.createBlobWithData(blob.contentType ?? '', blob.buffer)
+    const blobRef = cblite.createBlobWithData(blob.contentType ?? '', blob.data)
 
     cblite.documentSetBlob(docRef, property, blobRef)
 

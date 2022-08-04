@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import type { BlobConfig, BlobMetadata, DatabaseRef, QueryRef, ReplicatedDocInfo, ReplicatorConfiguration, ReplicatorRef, ReplicatorStatus } from '@recouch/core'
+import type { BlobMetadata, DatabaseRef, QueryRef, ReplicatedDocInfo, ReplicatorConfiguration, ReplicatorRef, ReplicatorStatus } from '@recouch/core'
 import type { MergeExclusive, Opaque } from 'type-fest'
 
 export type ListenerToken = Opaque<unknown, 'ListenerToken'>
@@ -21,6 +21,11 @@ interface QueryRefOptions<T = unknown, P = Record<string, string>> {
 interface ReplicatorRefOptions {
   replicator: ReplicatorRef
 }
+
+export declare type BlobConfig = {
+    data: string;
+    contentType?: string;
+};
 
 interface BlobOptions {
   blob: BlobConfig
@@ -67,16 +72,11 @@ export interface CouchbaseLitePlugin {
   startReplicator(options: ReplicatorRefOptions & { resetCheckpoint?: boolean }): Result<void>
   stopReplicator(options: ReplicatorRefOptions): Result<void>
 
-  blobContent(options: BlobOptions): Result<Buffer>
-  blobContentType(options: BlobOptions): Result<string>
-  blobCreateJson(options: BlobOptions): Result<string>
   blobProperties(options: BlobOptions): Result<BlobMetadata>
-  blobDigest(options: BlobOptions): Result<string>
-  blobEquals(options: BlobOptions & { anotherBlob: BlobConfig }): Result<boolean>
-  blobLength(options: BlobOptions): Result<number>
-  databaseGetBlob(options: { database: DatabaseRef, properties: BlobMetadata }): Result<Buffer>
+  databaseGetBlob(options: { database: DatabaseRef, properties: BlobMetadata }): Result<string>
   databaseSaveBlob(options: BlobOptions & { database: DatabaseRef }): Result<void>
-  documentGetBlob(options: DatabaseRefOptions & { id: string, property: string }): Result<Buffer>
+  documentGetBlob(options: DatabaseRefOptions & { id: string, property: string }): Result<string>
+  documentGetBlobProperties(options: DatabaseRefOptions & { id: string, property: string }): Result<BlobMetadata>
   documentIsBlob(options: DatabaseRefOptions & { id: string, property: string }): Result<boolean>
-  documentSetBlob(options: DatabaseRefOptions & BlobOptions & { id: string, property: string }): Result<void>
+  documentSaveBlob(options: DatabaseRefOptions & BlobOptions & { id: string, property: string }): Result<void>
 }

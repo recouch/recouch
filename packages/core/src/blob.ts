@@ -26,7 +26,7 @@ export type DocumentIsBlob =
   & ((database: DatabaseRef) => (id: string, property: string) => Promise<boolean>)
   & ((database: DatabaseRef) => (id: string) => (property: string) => Promise<boolean>)
   & ((database: DatabaseRef, id: string) => (property: string) => Promise<boolean>)
-export type DocumentSetBlob =
+export type DocumentSaveBlob =
   & ((database: DatabaseRef, id: string, property: string, blob: BlobConfig) => Promise<void>)
   & ((database: DatabaseRef) => (id: string, property: string, blob: BlobConfig) => Promise<void>)
   & ((database: DatabaseRef) => (id: string, property: string) => (blob: BlobConfig) => Promise<void>)
@@ -41,4 +41,4 @@ export const databaseSaveBlob: DatabaseSaveBlob = adapterFunction('databaseSaveB
 export const documentGetBlob: DocumentGetBlob = adapterFunction('documentGetBlob')
 export const documentGetBlobProperties: DocumentGetBlobProperties = adapterFunction('documentGetBlobProperties')
 export const documentIsBlob: DocumentIsBlob = adapterFunction('documentIsBlob')
-export const documentSetBlob: DocumentSetBlob = adapterFunction('documentSetBlob')
+export const documentSaveBlob: DocumentSaveBlob = adapterFunction('documentSaveBlob')

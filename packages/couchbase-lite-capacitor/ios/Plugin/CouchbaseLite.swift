@@ -367,4 +367,83 @@ struct ListenerMeta {
         
         return listenerMeta.callbackId
     }
+    
+//    Blob
+    func blobProperties(contentType: String, data: Data) -> [String : Any] {
+        let blob = Blob(contentType: contentType, data: data)
+
+        return blob.properties
+    }
+    
+    func databaseGetBlob(databaseKey: Int, properties: [String : Any]) -> Data? {
+        guard let database = databases[databaseKey] else {
+            return nil
+        }
+
+        let blob = try?database.getBlob(properties: properties)
+        
+        return blob?.content
+    }
+    
+    func databaseSaveBlob(databaseKey: Int, contentType: String, data: Data) -> Void {
+        guard let database = databases[databaseKey] else {
+            return
+        }
+        let blob = Blob(contentType: contentType, data: data)
+
+        try!database.saveBlob(blob: blob)
+    }
+    
+    func documentGetBlob(databaseKey: Int, id: String, property: String) -> Data? {
+        guard let database = databases[databaseKey] else {
+            return nil
+        }
+        guard let document = database.document(withID: id) else {
+            return nil
+        }
+
+        let blob = document.blob(forKey: property)
+        
+        return blob?.content
+    }
+    
+    func documentGetBlobProperties(databaseKey: Int, id: String, property: String) -> [String : Any]? {
+        guard let database = databases[databaseKey] else {
+            return nil
+        }
+        guard let document = database.document(withID: id) else {
+            return nil
+        }
+
+        let blob = document.blob(forKey: property)
+        
+        return blob?.properties
+    }
+    
+    func documentIsBlob(databaseKey: Int, id: String, property: String) -> Bool {
+        guard let database = databases[databaseKey] else {
+            return false
+        }
+        guard let document = database.document(withID: id)?.toMutable() else {
+            return false
+        }
+
+        let blob = document.blob(forKey: property)
+        
+        return blob != nil
+    }
+
+    func documentSaveBlob(databaseKey: Int, id: String, property: String, contentType: String, data: Data) -> Void {
+        guard let database = databases[databaseKey] else {
+            return
+        }
+        guard let document = database.document(withID: id)?.toMutable() else {
+            return
+        }
+        let blob = Blob(contentType: contentType, data: data)
+
+        document.setBlob(blob, forKey: property)
+        
+        try!database.saveDocument(document)
+    }
 }

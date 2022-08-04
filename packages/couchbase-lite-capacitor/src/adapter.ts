@@ -1,4 +1,5 @@
 import type { CouchbaseLiteAdapter } from '@recouch/core'
+import { blobProperties, databaseGetBlob, databaseSaveBlob, documentGetBlob, documentGetBlobProperties, documentIsBlob, documentSaveBlob } from './functions/blob'
 
 import { addDatabaseChangeListener, beginTransaction, closeDatabase, databaseName, databasePath, deleteDatabase, endTransaction, openDatabase } from './functions/database'
 import { addDocumentChangeListener, documentExists, getDocument, saveDocument } from './functions/document'
@@ -40,11 +41,11 @@ export const adapter: CouchbaseLiteAdapter = {
   startReplicator,
   stopReplicator,
 
-  blobProperties: async () => { throw new Error('unimplemented') },
-  databaseGetBlob: async () => { throw new Error('unimplemented') },
-  databaseSaveBlob: async () => { throw new Error('unimplemented') },
-  documentGetBlob: async () => { throw new Error('unimplemented') },
-  documentGetBlobProperties: async () => { throw new Error('unimplemented') },
-  documentIsBlob: async () => { throw new Error('unimplemented') },
-  documentSetBlob: async () => { throw new Error('unimplemented') }
+  blobProperties,
+  databaseGetBlob,
+  databaseSaveBlob,
+  documentGetBlob,
+  documentGetBlobProperties,
+  documentIsBlob,
+  documentSaveBlob
 }

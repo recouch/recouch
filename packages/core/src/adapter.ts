@@ -1,4 +1,4 @@
-import { AdapterBlobProperties, AdapterDatabaseGetBlob, AdapterDatabaseSaveBlob, AdapterDocumentGetBlob, AdapterDocumentGetBlobProperties, AdapterDocumentIsBlob, AdapterDocumentSetBlob, AdapterAddDatabaseChangeListener, AdapterBeginTransaction, AdapterCloseDatabase, AdapterDatabaseName, AdapterDatabasePath, AdapterDeleteDatabase, AdapterEndTransaction, AdapterAddDocumentChangeListener, AdapterDeleteDocument, AdapterGetDocument, AdapterDocumentExists, AdapterGetRevisionID, AdapterSaveDocument, AdapterCreateQuery, AdapterAddQueryChangeListener, AdapterExecuteQuery, AdapterExplainQuery, AdapterGetQueryParameters, AdapterSetQueryParameters, AdapterAddDocumentReplicationListener, AdapterAddReplicatorChangeListener, AdapterCreateReplicator, AdapterDocumentsPendingReplication, AdapterIsDocumentPendingReplication, AdapterSetHostReachable, AdapterStartReplicator, AdapterStopReplicator, AdapterOpenDatabase, AdapterGetReplicatorConfiguration, AdapterGetReplicatorStatus } from './adapterFunctions'
+import { AdapterBlobProperties, AdapterDatabaseGetBlob, AdapterDatabaseSaveBlob, AdapterDocumentGetBlob, AdapterDocumentGetBlobProperties, AdapterDocumentIsBlob, AdapterDocumentSaveBlob, AdapterAddDatabaseChangeListener, AdapterBeginTransaction, AdapterCloseDatabase, AdapterDatabaseName, AdapterDatabasePath, AdapterDeleteDatabase, AdapterEndTransaction, AdapterAddDocumentChangeListener, AdapterDeleteDocument, AdapterGetDocument, AdapterDocumentExists, AdapterGetRevisionID, AdapterSaveDocument, AdapterCreateQuery, AdapterAddQueryChangeListener, AdapterExecuteQuery, AdapterExplainQuery, AdapterGetQueryParameters, AdapterSetQueryParameters, AdapterAddDocumentReplicationListener, AdapterAddReplicatorChangeListener, AdapterCreateReplicator, AdapterDocumentsPendingReplication, AdapterIsDocumentPendingReplication, AdapterSetHostReachable, AdapterStartReplicator, AdapterStopReplicator, AdapterOpenDatabase, AdapterGetReplicatorConfiguration, AdapterGetReplicatorStatus } from './adapterFunctions'
 
 export interface CouchbaseLiteAdapter {
   // Blob
@@ -8,7 +8,7 @@ export interface CouchbaseLiteAdapter {
   documentGetBlob: AdapterDocumentGetBlob
   documentGetBlobProperties: AdapterDocumentGetBlobProperties
   documentIsBlob: AdapterDocumentIsBlob
-  documentSetBlob: AdapterDocumentSetBlob
+  documentSaveBlob: AdapterDocumentSaveBlob
 
   // Database
   addDatabaseChangeListener: AdapterAddDatabaseChangeListener

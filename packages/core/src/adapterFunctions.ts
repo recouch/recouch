@@ -7,7 +7,7 @@ export interface DatabaseConfig {
 }
 
 export type BlobConfig = {
-  buffer: Buffer
+  data: Buffer
   contentType?: string
 }
 
@@ -17,16 +17,6 @@ export interface BlobMetadata {
   digest: string
   length: number
 }
-export type DatabaseChangeListener = (docIDs: string[]) => void
-export type DocumentChangeListener = (docID: string) => void
-export type DocumentReplicationListener = (direction: 'push' | 'pull', documents: ReplicatedDocInfo[]) => void
-export type QueryChangeListener<T> = (results: T[]) => void
-export type ReplicatorChangeListener = (status: ReplicatorStatus) => void
-export type RemoveDatabaseChangeListener = () => void
-export type RemoveDocumentChangeListener = () => void
-export type RemoveQueryChangeListener = () => void
-export type RemoveDocumentReplicationListener = () => void
-export type RemoveReplicatorChangeListener = () => void
 
 export type ReplicatedDocInfo = {
   id: string
@@ -57,19 +47,20 @@ export interface ReplicatorStatus {
   }
 }
 
+export type DatabaseChangeListener = (docIDs: string[]) => void
+export type DocumentChangeListener = (docID: string) => void
+export type DocumentReplicationListener = (direction: 'push' | 'pull', documents: ReplicatedDocInfo[]) => void
+export type QueryChangeListener<T> = (results: T[]) => void
+export type ReplicatorChangeListener = (status: ReplicatorStatus) => void
+export type RemoveDatabaseChangeListener = () => void
+export type RemoveDocumentChangeListener = () => void
+export type RemoveQueryChangeListener = () => void
+export type RemoveDocumentReplicationListener = () => void
+export type RemoveReplicatorChangeListener = () => void
+
 export type AdapterAddDatabaseChangeListener = (database: DatabaseRef, handler: DatabaseChangeListener) => Promise<RemoveDatabaseChangeListener>
-
-/**
- * Begin a transaction.
- * @param database {@link @recouch/couchbase-lite#DatabaseRef}.
- */
 export type AdapterBeginTransaction = (database: DatabaseRef) => Promise<void>
-/**
- * Close the database.
- * @param database {@link @recouch/couchbase-lite#DatabaseRef}.
- */
 export type AdapterCloseDatabase = (database: DatabaseRef) => Promise<void>
-
 export type AdapterDatabaseName = (database: DatabaseRef) => Promise<string>
 export type AdapterDatabasePath = (database: DatabaseRef) => Promise<string>
 export type AdapterDeleteDatabase = ((name: string, directory: string) => Promise<void>) & ((database: DatabaseRef) => Promise<void>)
@@ -107,4 +98,4 @@ export type AdapterDatabaseSaveBlob = (database: DatabaseRef, blob: BlobConfig) 
 export type AdapterDocumentGetBlob = (database: DatabaseRef, id: string, property: string) => Promise<Buffer>
 export type AdapterDocumentGetBlobProperties = (database: DatabaseRef, id: string, property: string) => Promise<BlobMetadata>
 export type AdapterDocumentIsBlob = (database: DatabaseRef, id: string, property: string) => Promise<boolean>
-export type AdapterDocumentSetBlob = (database: DatabaseRef, id: string, property: string, blob: BlobConfig) => Promise<void>
+export type AdapterDocumentSaveBlob = (database: DatabaseRef, id: string, property: string, blob: BlobConfig) => Promise<void>

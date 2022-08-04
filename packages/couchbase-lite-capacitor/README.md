@@ -46,18 +46,13 @@ npx cap sync
 * [`setHostReachable(...)`](#sethostreachable)
 * [`startReplicator(...)`](#startreplicator)
 * [`stopReplicator(...)`](#stopreplicator)
-* [`blobContent(...)`](#blobcontent)
-* [`blobContentType(...)`](#blobcontenttype)
-* [`blobCreateJson(...)`](#blobcreatejson)
 * [`blobProperties(...)`](#blobproperties)
-* [`blobDigest(...)`](#blobdigest)
-* [`blobEquals(...)`](#blobequals)
-* [`blobLength(...)`](#bloblength)
 * [`databaseGetBlob(...)`](#databasegetblob)
 * [`databaseSaveBlob(...)`](#databasesaveblob)
 * [`documentGetBlob(...)`](#documentgetblob)
+* [`documentGetBlobProperties(...)`](#documentgetblobproperties)
 * [`documentIsBlob(...)`](#documentisblob)
-* [`documentSetBlob(...)`](#documentsetblob)
+* [`documentSaveBlob(...)`](#documentsaveblob)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -566,51 +561,6 @@ stopReplicator(options: ReplicatorRefOptions) => Result<void>
 --------------------
 
 
-### blobContent(...)
-
-```typescript
-blobContent(options: BlobOptions) => Result<Buffer>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a></code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;Buffer&gt;</code>
-
---------------------
-
-
-### blobContentType(...)
-
-```typescript
-blobContentType(options: BlobOptions) => Result<string>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a></code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;string&gt;</code>
-
---------------------
-
-
-### blobCreateJson(...)
-
-```typescript
-blobCreateJson(options: BlobOptions) => Result<string>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a></code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;string&gt;</code>
-
---------------------
-
-
 ### blobProperties(...)
 
 ```typescript
@@ -626,62 +576,17 @@ blobProperties(options: BlobOptions) => Result<BlobMetadata>
 --------------------
 
 
-### blobDigest(...)
-
-```typescript
-blobDigest(options: BlobOptions) => Result<string>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a></code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;string&gt;</code>
-
---------------------
-
-
-### blobEquals(...)
-
-```typescript
-blobEquals(options: BlobOptions & { anotherBlob: BlobConfig; }) => Result<boolean>
-```
-
-| Param         | Type                                                                                                         |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a> & { anotherBlob: <a href="#blobconfig">BlobConfig</a>; }</code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;boolean&gt;</code>
-
---------------------
-
-
-### blobLength(...)
-
-```typescript
-blobLength(options: BlobOptions) => Result<number>
-```
-
-| Param         | Type                                                |
-| ------------- | --------------------------------------------------- |
-| **`options`** | <code><a href="#bloboptions">BlobOptions</a></code> |
-
-**Returns:** <code><a href="#result">Result</a>&lt;number&gt;</code>
-
---------------------
-
-
 ### databaseGetBlob(...)
 
 ```typescript
-databaseGetBlob(options: { database: DatabaseRef; properties: BlobMetadata; }) => Result<Buffer>
+databaseGetBlob(options: { database: DatabaseRef; properties: BlobMetadata; }) => Result<string>
 ```
 
 | Param         | Type                                                                                                                             |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | **`options`** | <code>{ database: <a href="#tagged">Tagged</a>&lt;'Database'&gt;; properties: <a href="#blobmetadata">BlobMetadata</a>; }</code> |
 
-**Returns:** <code><a href="#result">Result</a>&lt;Buffer&gt;</code>
+**Returns:** <code><a href="#result">Result</a>&lt;string&gt;</code>
 
 --------------------
 
@@ -704,14 +609,29 @@ databaseSaveBlob(options: BlobOptions & { database: DatabaseRef; }) => Result<vo
 ### documentGetBlob(...)
 
 ```typescript
-documentGetBlob(options: DatabaseRefOptions & { id: string; property: string; }) => Result<Buffer>
+documentGetBlob(options: DatabaseRefOptions & { id: string; property: string; }) => Result<string>
 ```
 
 | Param         | Type                                                                                                  |
 | ------------- | ----------------------------------------------------------------------------------------------------- |
 | **`options`** | <code><a href="#databaserefoptions">DatabaseRefOptions</a> & { id: string; property: string; }</code> |
 
-**Returns:** <code><a href="#result">Result</a>&lt;Buffer&gt;</code>
+**Returns:** <code><a href="#result">Result</a>&lt;string&gt;</code>
+
+--------------------
+
+
+### documentGetBlobProperties(...)
+
+```typescript
+documentGetBlobProperties(options: DatabaseRefOptions & { id: string; property: string; }) => Result<BlobMetadata>
+```
+
+| Param         | Type                                                                                                  |
+| ------------- | ----------------------------------------------------------------------------------------------------- |
+| **`options`** | <code><a href="#databaserefoptions">DatabaseRefOptions</a> & { id: string; property: string; }</code> |
+
+**Returns:** <code><a href="#result">Result</a>&lt;<a href="#blobmetadata">BlobMetadata</a>&gt;</code>
 
 --------------------
 
@@ -731,10 +651,10 @@ documentIsBlob(options: DatabaseRefOptions & { id: string; property: string; }) 
 --------------------
 
 
-### documentSetBlob(...)
+### documentSaveBlob(...)
 
 ```typescript
-documentSetBlob(options: DatabaseRefOptions & BlobOptions & { id: string; property: string; }) => Result<void>
+documentSaveBlob(options: DatabaseRefOptions & BlobOptions & { id: string; property: string; }) => Result<void>
 ```
 
 | Param         | Type                                                                                                                                           |
@@ -796,13 +716,6 @@ documentSetBlob(options: DatabaseRefOptions & BlobOptions & { id: string; proper
 | **`pullFilter`**         | <code>((document: { documentID: string; value: object; accessRemoved: boolean; deleted: boolean; }) =&gt; void)</code> |
 
 
-#### BlobOptions
-
-| Prop       | Type                                              |
-| ---------- | ------------------------------------------------- |
-| **`blob`** | <code><a href="#blobconfig">BlobConfig</a></code> |
-
-
 #### BlobMetadata
 
 | Prop               | Type                |
@@ -811,6 +724,13 @@ documentSetBlob(options: DatabaseRefOptions & BlobOptions & { id: string; proper
 | **`content_type`** | <code>string</code> |
 | **`digest`**       | <code>string</code> |
 | **`length`**       | <code>number</code> |
+
+
+#### BlobOptions
+
+| Prop       | Type                                              |
+| ---------- | ------------------------------------------------- |
+| **`blob`** | <code><a href="#blobconfig">BlobConfig</a></code> |
 
 
 ### Type Aliases
@@ -920,6 +840,6 @@ Make all properties in T optional
 
 #### BlobConfig
 
-<code>{ buffer: Buffer; contentType?: string; }</code>
+<code>{ data: Buffer; contentType?: string; }</code>
 
 </docgen-api>

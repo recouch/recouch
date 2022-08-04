@@ -384,83 +384,173 @@ public class CouchbaseLitePlugin: CAPPlugin {
         call.resolve()
     }
 
-    @objc func blobContent(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func blobContentType(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func blobCreateJson(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
+//    Blob
     @objc func blobProperties(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let blob = call.getObject("blob") else {
+            call.reject("Blob config not specified")
+            return
+        }
+        guard let contentType = blob["contentType"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let dataString = blob["data"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let data = Data(base64Encoded: dataString) else {
+            call.reject("Invalid data")
+            return
+        }
+        
+        call.resolve([
+            "value": implementation.blobProperties(contentType: contentType, data: data)
+        ])
     }
-
-    @objc func createBlobWithData(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func createBlobWithStream(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func blobDigest(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func blobEquals(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func blobLength(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func openBlobContentStream(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func closeBlobReader(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func readBlobReader(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func closeBlobWriter(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func createBlobWriter(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
-    @objc func writeBlobWriter(_ call: CAPPluginCall) {
-        call.unimplemented()
-    }
-
+    
     @objc func databaseGetBlob(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let properties = call.getObject("properties") else {
+            call.reject("Blob properties not specified")
+            return
+        }
+        guard let data = implementation.databaseGetBlob(databaseKey: databaseKey, properties: properties) else {
+            call.reject("No blob with the given properties was found in the database")
+            return
+        }
+        
+        call.resolve([
+            "value": data.base64EncodedString()
+        ])
     }
-
+    
     @objc func databaseSaveBlob(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let blob = call.getObject("blob") else {
+            call.reject("Blob config not specified")
+            return
+        }
+        guard let contentType = blob["contentType"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let dataString = blob["data"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let data = Data(base64Encoded: dataString) else {
+            call.reject("Invalid data")
+            return
+        }
+        
+        implementation.databaseSaveBlob(databaseKey: databaseKey, contentType: contentType, data: data)
+        
+        call.resolve()
     }
-
+    
     @objc func documentGetBlob(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        guard let property = call.getString("property") else {
+            call.reject("No document property specified")
+            return
+        }
+        guard let data = implementation.documentGetBlob(databaseKey: databaseKey, id: id, property: property) else {
+            call.reject("No blob was found in the given document at the given property")
+            return
+        }
+        
+        call.resolve([
+            "value": data.base64EncodedString()
+        ])
     }
-
+    
+    @objc func documentGetBlobProperties(_ call: CAPPluginCall) {
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        guard let property = call.getString("property") else {
+            call.reject("No document property specified")
+            return
+        }
+        guard let properties = implementation.documentGetBlobProperties(databaseKey: databaseKey, id: id, property: property) else {
+            call.resolve()
+            return
+        }
+        
+        call.resolve([
+            "value": properties
+        ])
+    }
+    
     @objc func documentIsBlob(_ call: CAPPluginCall) {
-        call.unimplemented()
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        guard let property = call.getString("property") else {
+            call.reject("No document property specified")
+            return
+        }
+        
+        call.resolve([
+            "value": implementation.documentIsBlob(databaseKey: databaseKey, id: id, property: property)
+        ])
     }
-
-    @objc func documentSetBlob(_ call: CAPPluginCall) {
-        call.unimplemented()
+    
+    @objc func documentSaveBlob(_ call: CAPPluginCall) {
+        guard let databaseKey = call.getInt("database") else {
+            call.reject("No database specified")
+            return
+        }
+        guard let id = call.getString("id") else {
+            call.reject("No document id specified")
+            return
+        }
+        guard let property = call.getString("property") else {
+            call.reject("No document property specified")
+            return
+        }
+        guard let blob = call.getObject("blob") else {
+            call.reject("Blob config not specified")
+            return
+        }
+        guard let contentType = blob["contentType"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let dataString = blob["data"] as? String else {
+            call.reject("contentType config not specified")
+            return
+        }
+        guard let data = Data(base64Encoded: dataString) else {
+            call.reject("Invalid data")
+            return
+        }
+        
+        implementation.documentSaveBlob(databaseKey: databaseKey, id: id, property: property, contentType: contentType, data: data)
+        
+        call.resolve()
     }
 }

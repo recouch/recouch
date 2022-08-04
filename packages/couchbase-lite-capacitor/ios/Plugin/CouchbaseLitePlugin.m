@@ -59,26 +59,11 @@ CAP_PLUGIN(CouchbaseLitePlugin, "CouchbaseLite",
            CAP_PLUGIN_METHOD(createBlobWithStream, CAPPluginReturnPromise);
            
 //           (Blob)
-           CAP_PLUGIN_METHOD(blobContent, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(blobContentType, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(blobCreateJson, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(blobProperties, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(blobDigest, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(blobEquals, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(blobLength, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(openBlobContentStream, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(closeBlobReader, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(readBlobReader, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(closeBlobWriter, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(createBlobWriter, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(writeBlobWriter, CAPPluginReturnPromise);
-           
-//           (Database, [Blob])
            CAP_PLUGIN_METHOD(databaseGetBlob, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(databaseSaveBlob, CAPPluginReturnPromise);
-           
-//           (Document, [Blob])
            CAP_PLUGIN_METHOD(documentGetBlob, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(documentGetBlobProperties, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(documentIsBlob, CAPPluginReturnPromise);
-           CAP_PLUGIN_METHOD(documentSetBlob, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(documentSaveBlob, CAPPluginReturnPromise);
 )
