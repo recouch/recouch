@@ -8,7 +8,9 @@
     "url": "https://github.com/recouch/recouch.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "bump:dev": "lerna version prerelease --no-git-tag-version --amend --preid DEV",
+    "pack": "npm pack -ws --pack-destination ..",
+    "prepack": "npm run bump:dev"
   },
   "author": "Justin Paul Silva",
   "license": "Apache-2.0",

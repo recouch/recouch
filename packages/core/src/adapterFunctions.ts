@@ -28,6 +28,15 @@ export type ReplicatorType = 'pushAndPull' | 'push' | 'pull'
 export interface ReplicatorConfiguration {
   database: DatabaseRef
   endpoint: DatabaseRef | string
+  authenticator?: {
+    type: 'basic',
+    username: string,
+    password: string
+  } | {
+    type: 'session',
+    sessionID: string,
+    cookieName?: string
+  }
   replicatorType?: ReplicatorType
   continuous?: boolean
   disableAutoPurge?: boolean

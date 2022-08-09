@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "cbl/CouchbaseLite.h"
 #include "Listener.h"
+#include "NapiConvert.h"
 #include "util.h"
 
 static void finalize_replicator_database_external(napi_env env, void *data, void *hint)
@@ -197,8 +198,7 @@ static void ReplicationFilterCallJS(napi_env env, napi_value js_cb, void *contex
   free(data);
 }
 
-napi_value
-Replicator_Create(napi_env env, napi_callback_info info)
+napi_value Replicator_Create(napi_env env, napi_callback_info info)
 {
   size_t argc = 1;
   napi_value args[1];
@@ -276,6 +276,35 @@ Replicator_Create(napi_env env, napi_callback_info info)
     else if (strcmp(replicatorType, "pull") == 0)
     {
       config.replicatorType = kCBLReplicatorTypePull;
+    }
+  }
+
+  napi_value napiAuthenticator;
+  CHECK(napi_get_named_property(env, napiConfig, "authenticator", &napiAuthenticator));
+
+  if (napiAuthenticator != napi_undefined)
+  {
+    FLDict authenticator = napiValueToFLDict(env, napiAuthenticator);
+    FLValue authType = FLDict_Get(authenticator, FLSTR("type"));
+
+    if (FLSlice_Compare(FLValue_AsString(authType), FLSTR("basic")) == 0)
+    {
+      CBLAuthenticator *basicAuth = CBLAuth_CreatePassword(
+          FLValue_AsString(FLDict_Get(authenticator, FLSTR("username"))),
+          FLValue_AsString(FLDict_Get(authenticator, FLSTR("password"))));
+
+      config.authenticator = basicAuth;
+    }
+
+    if (FLSlice_Compare(FLValue_AsString(authType), FLSTR("session")) == 0)
+    {
+      FLValue sessionID = FLDict_Get(authenticator, FLSTR("sessionID"));
+
+      // cookieName may be NULL, and that's OK
+      FLValue cookieName = FLDict_Get(authenticator, FLSTR("cookieName"));
+      CBLAuthenticator *sessionAuth = CBLAuth_CreateSession(FLValue_AsString(sessionID), FLValue_AsString(cookieName));
+
+      config.authenticator = sessionAuth;
     }
   }
 
