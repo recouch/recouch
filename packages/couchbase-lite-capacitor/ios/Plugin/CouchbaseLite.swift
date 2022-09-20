@@ -262,7 +262,7 @@ struct ListenerMeta {
     }
     
 //    Replicator
-    public func createReplicator(config: Dictionary<String, Any>) -> Int {
+    public func createReplicator(config: JSObject) -> Int {
         guard let databaseKey = config["database"] as? Int else {
             return 0
         }
@@ -280,10 +280,29 @@ struct ListenerMeta {
         }
         
         let target = URLEndpoint(url: targetURL)
-
         let replicatorKey = getNextReplicatorKey()
+        var replicatorConfig = ReplicatorConfiguration(database: database, target: target)
+        let authentication = config["authenticator"] as? Dictionary<String, String>
         
-        let replicatorConfig = ReplicatorConfiguration(database: database, target: target)
+        if (authentication?["type"] == "basic") {
+            guard let username = authentication?["username"] else {
+                return 0
+            }
+            guard let password = authentication?["password"] else {
+                return 0
+            }
+
+            replicatorConfig.authenticator = BasicAuthenticator(username: username, password: password)
+        } else
+        if (authentication?["type"] == "session") {
+            guard let sessionID = authentication?["sessionID"] else {
+                return 0
+            }
+            let cookieName = authentication?["cookieName"]
+
+            replicatorConfig.authenticator = SessionAuthenticator(sessionID: sessionID, cookieName: cookieName)
+        
+        }
         
         replicators[replicatorKey] = Replicator.init(config: replicatorConfig)
         

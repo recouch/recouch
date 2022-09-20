@@ -3,6 +3,7 @@
 import type { AdapterAddDocumentChangeListener, AdapterDeleteDocument, AdapterDocumentExists, AdapterGetDocument, AdapterSaveDocument, DatabaseRef } from '@recouch/core'
 
 import { CouchbaseLite } from '../plugin'
+
 import { getValue } from './utils'
 
 export type RemoveDocumentChangeListener = () => void

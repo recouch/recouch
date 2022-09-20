@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "bump:dev",
+			"problemMatcher": [],
+			"label": "bump DEV prerelease version",
+			"detail": "lerna version prerelease --no-git-tag-version --amend --preid DEV"
+		}
+	]
+}

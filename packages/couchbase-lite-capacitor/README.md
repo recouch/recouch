@@ -701,19 +701,20 @@ documentSaveBlob(options: DatabaseRefOptions & BlobOptions & { id: string; prope
 
 #### ReplicatorConfiguration
 
-| Prop                     | Type                                                                                                                   |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| **`database`**           | <code><a href="#databaseref">DatabaseRef</a></code>                                                                    |
-| **`endpoint`**           | <code>string \| <a href="#tagged">Tagged</a>&lt;'Database'&gt;</code>                                                  |
-| **`replicatorType`**     | <code><a href="#replicatortype">ReplicatorType</a></code>                                                              |
-| **`continuous`**         | <code>boolean</code>                                                                                                   |
-| **`disableAutoPurge`**   | <code>boolean</code>                                                                                                   |
-| **`maxAttempts`**        | <code>number</code>                                                                                                    |
-| **`maxAttemptWaitTime`** | <code>number</code>                                                                                                    |
-| **`heartbeat`**          | <code>number</code>                                                                                                    |
-| **`conflictResolver`**   | <code>((document: { documentID: string; localDocument: object; remoteDocument: object; }) =&gt; void)</code>           |
-| **`pushFilter`**         | <code>((document: { documentID: string; value: object; accessRemoved: boolean; deleted: boolean; }) =&gt; void)</code> |
-| **`pullFilter`**         | <code>((document: { documentID: string; value: object; accessRemoved: boolean; deleted: boolean; }) =&gt; void)</code> |
+| Prop                     | Type                                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **`database`**           | <code><a href="#databaseref">DatabaseRef</a></code>                                                                                 |
+| **`endpoint`**           | <code>string \| <a href="#tagged">Tagged</a>&lt;'Database'&gt;</code>                                                               |
+| **`authenticator`**      | <code>{ type: 'basic'; username: string; password: string; } \| { type: 'session'; sessionID: string; cookieName?: string; }</code> |
+| **`replicatorType`**     | <code><a href="#replicatortype">ReplicatorType</a></code>                                                                           |
+| **`continuous`**         | <code>boolean</code>                                                                                                                |
+| **`disableAutoPurge`**   | <code>boolean</code>                                                                                                                |
+| **`maxAttempts`**        | <code>number</code>                                                                                                                 |
+| **`maxAttemptWaitTime`** | <code>number</code>                                                                                                                 |
+| **`heartbeat`**          | <code>number</code>                                                                                                                 |
+| **`conflictResolver`**   | <code>((document: { documentID: string; localDocument: object; remoteDocument: object; }) =&gt; void)</code>                        |
+| **`pushFilter`**         | <code>((document: { documentID: string; value: object; accessRemoved: boolean; deleted: boolean; }) =&gt; void)</code>              |
+| **`pullFilter`**         | <code>((document: { documentID: string; value: object; accessRemoved: boolean; deleted: boolean; }) =&gt; void)</code>              |
 
 
 #### BlobMetadata
