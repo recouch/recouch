@@ -8,9 +8,10 @@
     "url": "https://github.com/recouch/recouch.git"
   },
   "scripts": {
+    "bump": "lerna version",
     "bump:dev": "lerna version prerelease --no-git-tag-version --amend --preid DEV",
     "pack": "npm pack -ws --pack-destination ..",
-    "prepack": "npm run bump:dev"
+    "prepack": "npm run build -ws && npm run bump:dev"
   },
   "author": "Justin Paul Silva",
   "license": "Apache-2.0",

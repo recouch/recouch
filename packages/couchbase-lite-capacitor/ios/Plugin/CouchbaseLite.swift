@@ -117,6 +117,10 @@ struct ListenerMeta {
         if (!commit) {
             return
         }
+        
+        if (transaction.isEmpty) {
+            return
+        }
 
         do {
             try database.inBatch {
@@ -158,11 +162,29 @@ struct ListenerMeta {
     }
     
     public func deleteDocument(databaseKey: Int, id: String) -> Void {
-        guard let document = databases[databaseKey]?.document(withID: id) else {
+        guard let database = databases[databaseKey] else {
             return
         }
 
-        return try!databases[databaseKey]!.deleteDocument(document)
+        guard let document = databases[databaseKey]?.document(withID: id) else {
+            return
+        }
+        
+        let operation: () -> Void = {
+            do {
+                try database.deleteDocument(document)
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        }
+        
+        guard var transaction = transactions[databaseKey] else {
+            operation()
+            return
+        }
+
+        transaction.append(operation)
+        transactions[databaseKey] = transaction
     }
     
     public func documentExists(databaseKey: Int, id: String) -> Bool {
@@ -182,12 +204,13 @@ struct ListenerMeta {
             try!database.saveDocument(document)
         }
         
-//        guard var transaction = transactions[databaseKey] else {
+        guard var transaction = transactions[databaseKey] else {
             operation()
-//            return
-//        }
-//
-//        transaction.append(operation)
+            return
+        }
+
+        transaction.append(operation)
+        transactions[databaseKey] = transaction
     }
     
 //  Query
