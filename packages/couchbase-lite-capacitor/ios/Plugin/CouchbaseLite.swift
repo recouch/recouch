@@ -324,9 +324,10 @@ struct ListenerMeta {
             let cookieName = authentication?["cookieName"]
 
             replicatorConfig.authenticator = SessionAuthenticator(sessionID: sessionID, cookieName: cookieName)
-        
         }
         
+        replicatorConfig.continuous = config["continuous"] as? Bool ?? false
+
         replicators[replicatorKey] = Replicator.init(config: replicatorConfig)
         
         return replicatorKey
