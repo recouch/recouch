@@ -358,7 +358,12 @@ struct ListenerMeta {
         let token = replicator.addDocumentReplicationListener { (replication: DocumentReplication) in
             call.resolve([
                 "direction": replication.isPush ? "push" : "pull",
-                "docIDs": replication.documents.map { $0.id }
+                "documents": replication.documents.map { [
+                    "id": $0.id,
+                    "error": $0.error?.localizedDescription as Any,
+                    "accessRemoved": $0.flags.contains(.accessRemoved),
+                    "deleted": $0.flags.contains(.deleted)
+                ] }
             ])
         }
         
